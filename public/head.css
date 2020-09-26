@@ -1,0 +1,23 @@
+h1 {
+  color: #373fff;
+  max-width: calc(100% - 5rem);
+  line-height: 1.1;
+}
+
+.box_right {
+    color: #FFF;
+    width:100px;
+    height:10px;
+    margin-right:10px;
+    float:right;
+    background-color:white;
+}
+
+.box_left {
+    color: #FFF;
+    width:100px;
+    height:30px;
+    margin-left:10px;
+    float:left;
+    background-color:white;
+}
