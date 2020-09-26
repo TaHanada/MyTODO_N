@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A cool thing made with Glitch">
+    <title>MyTODO</title>
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="1003512779839-25r03s9lkgkcc0fs5gqkgk7esv136g3q.apps.googleusercontent.com">
+  </head>
+  <body>
+    <h1 id="header" class="face">MyTODOへようこそ</h1>
+    <script src="animation.js"></script>
+    <form method="post" action="/login">
+      <input type="text" name="userName" placeholder="ユーザ名"/>
+      <input type="password" name="password" placeholder="パスワード"/>
+      <input type="submit"/>
+    </form>
+    <p>
+      <a href="/signup">Sign up</a>
+    </p>
+  </body>
+</html>
