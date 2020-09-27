@@ -1,56 +1,62 @@
-/* this file is loaded by index.html and styles the page */
-
-* {
-  box-sizing: border-box;
+.main-nav {
+  display: flex;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  margin-top: 34px;
+  list-style: none;
 }
 
-body {
-  font-family: sans-serif;
-  margin: 2em 1em;
-  line-height: 1.5em;
+.main-nav li {
+    margin-left: 36px;
+}
+.main-nav a {
+    color: #432;
+}
+.main-nav a:hover {
+    color: #0bd;
 }
 
-h1 {
-  font-style: italic;
-  color: #373fff;
-  max-width: calc(100% - 5rem);
-  line-height: 1.1;
+.page-header {
+  display: flex;
+  justify-content: space-between;
 }
 
-form {
-  background-color: #eee;
-  display: grid;
-  grid-gap: 1em;
-  padding: 1em;
-  max-width: 40ch;
+.wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 4%;
 }
 
-input {
-  border: 1px solid silver;
-  display: block;
-  font-size: 16px;
-  margin-bottom: 10px;
-  padding: 5px;
-  width: 100%;
+#home {
+  height: 100px;
+  margin-bottom: 40px;
 }
 
-form button {
-  background-color: #bbbbf2;
-  border: 2px solid currentColor;
-  border-radius: .25em;
-  cursor: pointer;
-  font-size: inherit;
-  line-height: 1.4em;
-  padding: 0.25em 1em;
-  max-width: 20ch;
+#home .page-title {
+  text-align: center;
 }
 
-form button:hover {
-  background-color: lavender;
+article {
+  width 70%
+}
+
+aside {
+  width 25%
+}
+
+.home-contents {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 50px;
 }
 
 footer {
-  margin-top: 3em;
-  padding-top: 1.5em;
-  border-top: 1px solid lightgrey;
+  background: #432;
+  text-align: center;
+  padding: 26px 0;
+}
+
+footer p {
+  color: #fff;
+  font-size: 0.875rem;
 }

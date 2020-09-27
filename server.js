@@ -112,6 +112,7 @@ app.get('/findBooks', function(req, res){
 
     // 検索条件（ここをユーザーidにする）
     // 条件の作り方： https://docs.mongodb.com/manual/reference/operator/query/
+    // console.log(req.books.cat);
     const condition = {userid:{$eq:req.cookies.user._id}};
 
     colBooks.find(condition).toArray(function(err, books) {
@@ -141,25 +142,6 @@ app.post('/saveBook', function(req, res){
   });
 });
 
-app.post('/addBook', function(req, res){
-  let received = '';
-  req.setEncoding('utf8');
-  req.on('data', function(chunk) {
-    received += chunk;
-  });
-  req.on('end', function() {
-    MongoClient.connect(mongouri, function(error, client) {
-      const db = client.db(process.env.DB); // 対象 DB
-      const colBooks = db.collection('books'); // 対象コレクション
-      const books = JSON.parse(received); // 保存対象
-      colBooks.insertOne(books, function(err, result) {
-        res.send(decodeURIComponent(result.insertedId)); // 追加したデータの ID を返す
-        client.close(); // DB を閉じる
-      });
-    });
-  });
-});
-
 app.post('/deleteBook', function(req, res){
   let received = '';
   req.setEncoding('utf8');
@@ -177,6 +159,82 @@ app.post('/deleteBook', function(req, res){
         res.sendStatus(200); // ステータスコードを返す
         client.close(); // DB を閉じる
       });
+    });
+  });
+});
+
+// カテゴリー系
+app.get('/findTasks', function(req, res){
+  MongoClient.connect(mongouri, function(error, client) {
+    const db = client.db(process.env.DB); // 対象 DB
+    const colBooks = db.collection('tasks'); // 対象コレクション
+
+    // 検索条件（ここをユーザーidにする）
+    // 条件の作り方： https://docs.mongodb.com/manual/reference/operator/query/
+    const condition = {userid:{$eq:req.cookies.user._id}};
+
+    colBooks.find(condition).toArray(function(err, books) {
+      res.json(books); // レスポンスとしてユーザを JSON 形式で返却
+      client.close(); // DB を閉じる
+    });
+  });
+});
+
+app.post('/addTask', function(req, res){
+  let received = '';
+  req.setEncoding('utf8');
+  req.on('data', function(chunk) {
+    received += chunk;
+  });
+  req.on('end', function() {
+    MongoClient.connect(mongouri, function(error, client) {
+      const db = client.db(process.env.DB); // 対象 DB
+      const colBooks = db.collection('tasks'); // 対象コレクション
+      const tasks = JSON.parse(received); // 保存対象
+      tasks.userid = req.cookies.user._id;
+      colBooks.insertOne(tasks, function(err, result) {
+        res.send(decodeURIComponent(result.insertedId)); // 追加したデータの ID を返す
+        client.close(); // DB を閉じる
+      });
+    });
+  });
+});
+
+app.post('/deleteTask', function(req, res){
+  let received = '';
+  req.setEncoding('utf8');
+  req.on('data', function(chunk) {
+    received += chunk;
+  });
+  req.on('end', function() {
+    MongoClient.connect(mongouri, function(error, client) {
+      const db = client.db(process.env.DB); // 対象 DB
+      const colBooks = db.collection('tasks'); // 対象コレクション
+      const target = JSON.parse(received); // 保存対象
+      const oid = new ObjectID(target.id);
+
+      colBooks.deleteOne({_id:{$eq:oid}}, function(err, result) {
+        res.sendStatus(200); // ステータスコードを返す
+        client.close(); // DB を閉じる
+      });
+    });
+  });
+});
+
+app.get('/linkTask', function(req, res){
+  MongoClient.connect(mongouri, function(error, client) {
+    const db = client.db(process.env.DB); // 対象 DB
+    const colBooks = db.collection('books'); // 対象コレクション
+
+    // 検索条件（ここをユーザーidにする）
+    // 条件の作り方： https://docs.mongodb.com/manual/reference/operator/query/
+    // console.log(req.books.cat);
+    console.log(req.query.catid);
+    const condition = {userid:{$eq:req.cookies.user._id}, catid:{$eq:req.query.catid}};
+
+    colBooks.find(condition).toArray(function(err, books) {
+      res.json(books); // レスポンスとしてユーザを JSON 形式で返却
+      client.close(); // DB を閉じる
     });
   });
 });
