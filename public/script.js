@@ -225,6 +225,12 @@ function addToTaskList(cat, id) {
   titleSpan.style.fontWeight = 'bold'; // 太字に
   titleSpan.style.display = 'inline-block';
   titleSpan.style.width = '200px';
+  
+  const numberSpan = document.createElement('span');
+  numberSpan.innerText = "残りタスク：0";
+  numberSpan.style.fontSize = '12px';
+  numberSpan.style.display = 'inline-block';
+  numberSpan.style.width = '120px';
 
   const delButton = document.createElement('button');
   delButton.innerText = '削除';
@@ -308,3 +314,5 @@ function linkTask(catid, cat) {
   req.open('GET', url, true);
   req.send();
 }
+
+// タスク数を管理したい
