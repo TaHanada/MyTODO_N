@@ -1,23 +1,56 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A cool thing made with Glitch">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A cool thing made with Glitch" />
     <title>MyTODO_home</title>
-    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"/>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <frameset rows="10%,*">
-    <frame src="head.html" name="head">
-    <frameset cols="25%,*">
-      <frame src="menu.html" name="menu">
-      <frame src="main.html" name="main">
-    </frameset>
-    <noframe>
-      <body>
-        フレーム表示ができません．
-      </body>
-    </noframe>
-  </frameset>
+  <body>
+    <div id="home" class="big-bg">
+      <header class="page-header wrapper">
+        <h1>
+          MyTODO
+        </h1>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="/logout">Log out</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+    <div class="home-contents wrapper">
+      <aside>
+        <input id="cat" type="text" placeholder="カテゴリー"/><!-- テキストボックス -->
+        <input type="button" value="New TODO" onclick="addTask()"/><!-- 追加ボタン -->
+        <div id="list"></div> 
+      </aside>
+      <article>
+        <p>
+          <div id="category" cat-id=""></div>
+        </p>
+        <textarea id="review" placeholder="内容" style="width:300px; height:50px;display:block;"></textarea>
+        <input id="price" placeholder="期限" type="text"/>
+        <input type="button" value="追加" onclick="saveBook()"/>
+        <div id="listmain"></div>
+      </article>
+    </div>
+    <footer>
+      <div class="wrapper">
+        <p>
+          <small>&copy; 2020 MyTODO</small>
+        </p>
+      </div>
+    </footer>
+  <script src="script.js"></script>
+  </body>
 </html>
