@@ -118,6 +118,7 @@ function saveBook() {
       // document.getElementById('cat').value = '';
       document.getElementById('price').value = '';
       document.getElementById('review').value = '';
+      numberTask(catid, cattext);
     }
   }
   req.open('POST', url, true);
@@ -199,6 +200,7 @@ function addToList(cat, price, review, catid, id) {
   delButton.innerText = '削除';
   delButton.onclick = function() {
     deleteBook(id); // レスポンスから得た ID を利用して削除
+    numberTask(catid, cat);
   }
   
   bookDiv.appendChild(priceSpan); // bookDiv に値段を追加
@@ -225,18 +227,13 @@ function addToTaskList(cat, id) {
   titleSpan.style.fontWeight = 'bold'; // 太字に
   titleSpan.style.display = 'inline-block';
   titleSpan.style.width = '200px';
-  
-  const numberSpan = document.createElement('span');
-  numberSpan.innerText = "残りタスク：0";
-  numberSpan.style.fontSize = '12px';
-  numberSpan.style.display = 'inline-block';
-  numberSpan.style.width = '120px';
 
   const delButton = document.createElement('button');
   delButton.innerText = '削除';
   delButton.onclick = function() {
     deleteBook(id); // レスポンスから得た ID を利用して削除
   }
+  
   let categoryElement = document.getElementById('category');
   categoryElement.setAttribute("cat-id", id);
   
@@ -259,7 +256,13 @@ function addToTaskList(cat, id) {
   catSpan.style.fontWeight = 'bold'; // 太字に
   catSpan.style.display = 'inline-block';
   catSpan.style.width = '200px';
-
+  
+  const numberSpan = document.createElement('span');
+  numberSpan.innerText = "残りタスク：0";
+  numberSpan.style.fontSize = '12px';
+  numberSpan.style.display = 'inline-block';
+  numberSpan.style.width = '120px';
+  
   const delButton2 = document.createElement('button');
   delButton2.innerText = '削除';
   delButton2.onclick = function() {
@@ -276,6 +279,7 @@ function addToTaskList(cat, id) {
   }
   
   listDiv.appendChild(catSpan); // bookDiv にタイトルを追加
+  listDiv.appendChild(numberSpan);
   listDiv.appendChild(delButton2);
   listArea.appendChild(listDiv);
 }
@@ -316,3 +320,62 @@ function linkTask(catid, cat) {
 }
 
 // タスク数を管理したい
+function numberTask(catid, cat) {
+  const url = '/linkTask?catid=' + catid; // 通信先
+  const req = new XMLHttpRequest(); // 通信用オブジェクト
+  
+  req.onreadystatechange = function() {
+    if(req.readyState == 4 && req.status == 200) {
+      const books = JSON.parse(req.response);
+      const number = books.length;
+      console.log(number);
+      changeTaskList(cat, catid, number);
+    }
+  }
+  req.open('GET', url, true);
+  req.send();
+}
+
+function changeTaskList(cat, id, number) {
+  removeAllChildren(listArea);
+  const listDiv = document.createElement('div'); // 追加する本の div 要素
+  listDiv.id = id; // レスポンスから得た ID を付与する
+  listDiv.style.width = '300px';
+  listDiv.style.margin = '20px 0px'; // 上下に 10 ピクセルのマージンを
+  listDiv.style.padding = '5px'; // 内側に余裕を
+  listDiv.style.backgroundColor = 'yellow'; // 背景色を明るめのオレンジに
+  listDiv.style.border = '1px solid black'; // 黒い枠を付ける
+  listDiv.style.borderRadius = '5px'; // 枠の角を少し丸く
+
+  const catSpan = document.createElement('span');
+  catSpan.innerText = cat;
+  catSpan.style.fontSize = '20px';
+  catSpan.style.fontWeight = 'bold'; // 太字に
+  catSpan.style.display = 'inline-block';
+  catSpan.style.width = '200px';
+  
+  const numberSpan = document.createElement('span');
+  numberSpan.innerText = "残りタスク：" + number;
+  numberSpan.style.fontSize = '12px';
+  numberSpan.style.display = 'inline-block';
+  numberSpan.style.width = '120px';
+  
+  const delButton2 = document.createElement('button');
+  delButton2.innerText = '削除';
+  delButton2.onclick = function() {
+    deleteTask(id); // レスポンスから得た ID を利用して削除
+  }
+  let catElement = document.getElementById('list');
+  catElement.setAttribute("cat-id", id);
+  catElement.appendChild(listDiv);
+  listDiv.value = cat;
+  
+  listDiv.onclick = function() {
+    linkTask(id, cat);
+  }
+  
+  listDiv.appendChild(catSpan); // bookDiv にタイトルを追加
+  listDiv.appendChild(numberSpan);
+  listDiv.appendChild(delButton2);
+  listArea.appendChild(listDiv);
+}
