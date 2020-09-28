@@ -238,3 +238,21 @@ app.get('/linkTask', function(req, res){
     });
   });
 });
+
+app.get('/deleteTaskandBook', function(req, res){
+  MongoClient.connect(mongouri, function(error, client) {
+    const db = client.db(process.env.DB); // 対象 DB
+    const colBooks = db.collection('books'); // 対象コレクション
+
+    // 検索条件（ここをユーザーidにする）
+    // 条件の作り方： https://docs.mongodb.com/manual/reference/operator/query/
+    // console.log(req.books.cat);
+    console.log(req.query.catid);
+    const condition = {userid:{$eq:req.cookies.user._id}, catid:{$eq:req.query.catid}};
+
+    colBooks.find(condition).toArray(function(err, books) {
+      res.json(books); // レスポンスとしてユーザを JSON 形式で返却
+      client.close(); // DB を閉じる
+    });
+  });
+});

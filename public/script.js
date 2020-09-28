@@ -1,6 +1,7 @@
 window.onload = findTasks; // 画面ロード時に実行
 
 const listArea = document.getElementById('list'); // リスト表示部
+
 // const list2Area = document.getElementById('listmain');
 // const categoryArea = document.getElementById('category');
 
@@ -172,6 +173,7 @@ function addToList(cat, price, review, catid, id) {
   taskDiv.style.borderRadius = '5px'; // 枠の角を少し丸く
   
   const titleSpan = document.createElement('span');
+  titleSpan.id = 'title';
   titleSpan.innerText = cat;
   titleSpan.style.fontSize = '20px';
   titleSpan.style.fontWeight = 'bold'; // 太字に
@@ -222,17 +224,12 @@ function addToTaskList(cat, id) {
   taskDiv.style.borderRadius = '5px'; // 枠の角を少し丸く
 
   const titleSpan = document.createElement('span');
+  titleSpan.id = 'title';
   titleSpan.innerText = cat;
   titleSpan.style.fontSize = '20px';
   titleSpan.style.fontWeight = 'bold'; // 太字に
   titleSpan.style.display = 'inline-block';
   titleSpan.style.width = '200px';
-
-  const delButton = document.createElement('button');
-  delButton.innerText = '削除';
-  delButton.onclick = function() {
-    deleteBook(id); // レスポンスから得た ID を利用して削除
-  }
   
   let categoryElement = document.getElementById('category');
   categoryElement.setAttribute("cat-id", id);
@@ -266,7 +263,8 @@ function addToTaskList(cat, id) {
   const delButton2 = document.createElement('button');
   delButton2.innerText = '削除';
   delButton2.onclick = function() {
-    deleteTask(id); // レスポンスから得た ID を利用して削除
+    deleteTaskandBook(id);
+    //twitter(cat);
   }
   
   let catElement = document.getElementById('list');
@@ -337,7 +335,7 @@ function numberTask(catid, cat) {
 }
 
 function changeTaskList(cat, id, number) {
-  removeAllChildren(listArea);
+  deleteTask(id);
   const listDiv = document.createElement('div'); // 追加する本の div 要素
   listDiv.id = id; // レスポンスから得た ID を付与する
   listDiv.style.width = '300px';
@@ -363,7 +361,8 @@ function changeTaskList(cat, id, number) {
   const delButton2 = document.createElement('button');
   delButton2.innerText = '削除';
   delButton2.onclick = function() {
-    deleteTask(id); // レスポンスから得た ID を利用して削除
+    deleteTaskandBook(id); // レスポンスから得た ID を利用して削除
+    //twitter(cat);
   }
   let catElement = document.getElementById('list');
   catElement.setAttribute("cat-id", id);
@@ -378,4 +377,74 @@ function changeTaskList(cat, id, number) {
   listDiv.appendChild(numberSpan);
   listDiv.appendChild(delButton2);
   listArea.appendChild(listDiv);
+}
+
+// カテゴリー削除で関連するタスクも全て削除する
+function deleteTaskandBook(catid) {
+  const url = '/deleteTaskandBook?catid=' + catid; // 通信先
+  const req = new XMLHttpRequest(); // 通信用オブジェクト
+  
+  deleteTask(catid);
+  // 2回目以降の入力対策
+  // removeAllChildren(document.getElementById('listmain'));
+  // removeAllChildren(listArea);
+  
+  req.onreadystatechange = function() {
+    if(req.readyState == 4 && req.status == 200) {
+      const books = JSON.parse(req.response);
+      for(let i in books) {
+        const book = books[i];
+        const id = book._id; // _id がユニークな ID
+        sample(catid);
+        deleteBook(id);
+        console.log(document.getElementById('title').innerText);
+        // addToList(cat, price, review, catid, id);
+      }
+    }
+  }
+  req.open('GET', url, true);
+  req.send();
+}
+
+function sample(id) {
+  removeAllChildren(document.getElementById('category'));
+  const taskDiv = document.createElement('div'); // 追加する本の div 要素
+  taskDiv.id = id; // レスポンスから得た ID を付与する
+  taskDiv.style.width = '300px';
+  taskDiv.style.margin = '10px 0px'; // 上下に 10 ピクセルのマージンを
+  taskDiv.style.padding = '2.5px'; // 内側に余裕を
+  taskDiv.style.backgroundColor = 'white'; // 背景色を
+  taskDiv.style.border = '1px solid black'; // 黒い枠を付ける
+  taskDiv.style.borderRadius = '5px'; // 枠の角を少し丸く
+
+  const titleSpan = document.createElement('span');
+  titleSpan.id = 'title';
+  titleSpan.innerText = ' ';
+  titleSpan.style.fontSize = '20px';
+  titleSpan.style.fontWeight = 'bold'; // 太字に
+  titleSpan.style.display = 'inline-block';
+  titleSpan.style.width = '200px';
+  
+  let categoryElement = document.getElementById('category');
+  categoryElement.setAttribute("cat-id", id);
+  
+  taskDiv.appendChild(titleSpan); // bookDiv にタイトルを追加
+  categoryElement.appendChild(taskDiv);
+}
+
+// Twitter連携
+function twitter(result) {
+  const tweetDivided = document.getElementById('tweet-area');
+  removeAllChildren(tweetDivided);
+  const anchor = document.createElement('a');
+  const hrefValue = "https://twitter.com/intent/tweet?button_hashtag=進捗報告&ref_src=twsrc%5Etfw";
+  anchor.setAttribute('href', hrefValue);
+  anchor.setAttribute('class', "twitter-hashtag-button");
+  anchor.setAttribute('data-text', result+"内のTODOを全て完了！偉い");
+  anchor.setAttribute('data-show-count', false);
+  // anchor.className = 'twitter-hashtag-button';
+  anchor.innerText = 'Tweet #進捗報告';
+  tweetDivided.appendChild(anchor);
+
+  //twttr.widgets.load(tweetDivided);
 }
