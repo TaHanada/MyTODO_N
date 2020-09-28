@@ -22,19 +22,31 @@
         <nav>
           <ul class="main-nav">
             <li><a href="/logout">Log out</a></li>
-            <li><a href="menu.html">Menu</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="menu.html">Account</a></li>
+            <li><a href="main.html">Group</a></li>
           </ul>
         </nav>
       </header>
     </div>
     <div class="home-contents wrapper">
       <aside>
+        <h3>
+          カテゴリー一覧
+        </h3>
         <input id="cat" type="text" placeholder="カテゴリー"/><!-- テキストボックス -->
         <input type="button" value="New TODO" onclick="addTask()"/><!-- 追加ボタン -->
-        <div id="list"></div> 
+        <p>
+          <div id="tweet-area">
+            <a href="https://twitter.com/intent/tweet?button_hashtag=進捗報告&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-text="" data-show-count="false">Tweet #進捗報告</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+        </p>
+        <div id="list"></div>
       </aside>
       <article>
+        <h3>
+          TODO一覧
+        </h3>
         <p>
           <div id="category" cat-id=""></div>
         </p>
