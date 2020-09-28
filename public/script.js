@@ -21,6 +21,8 @@ function findTasks() {
         const id = task._id; // _id がユニークな ID
 
         addToTaskList(cat, id);
+        sample(id);
+        numberTask(id, cat);
       }
     }
   }
@@ -279,7 +281,7 @@ function addToTaskList(cat, id) {
   listDiv.appendChild(catSpan); // bookDiv にタイトルを追加
   listDiv.appendChild(numberSpan);
   listDiv.appendChild(delButton2);
-  listArea.appendChild(listDiv);
+  document.getElementById('list').appendChild(listDiv);
 }
 
 // 何回もクリックしても子要素が増え続けないように削除する
@@ -335,7 +337,8 @@ function numberTask(catid, cat) {
 }
 
 function changeTaskList(cat, id, number) {
-  deleteTask(id);
+  let delNode = document.getElementById(id);
+  delNode.parentNode.removeChild(delNode);
   const listDiv = document.createElement('div'); // 追加する本の div 要素
   listDiv.id = id; // レスポンスから得た ID を付与する
   listDiv.style.width = '300px';
